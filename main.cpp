@@ -199,23 +199,23 @@ int main(int argc, char* argv[]) {
     m2 = 40;
     starting_demes = 5;
     niche_width = 5;
-    capacity = 20;
+    capacity = 25;
     anc_pop_size = 5000;
     
     burnin_time = 10;
-    expansion_start = 400;
+    expansion_start = 250;
     theta = 5;
     generations = 10;
     snapshot = 10;
     replicates = 1;
 
     expansionMode = 0;
-    expansionModeKim = 1;   // 0 = full expand, 1 = open front, 2 = controlled
-    selectionMode = 1;      // 0 = soft, 1 = hard
+    expansionModeKim = 2;   // 0 = full expand, 1 = open front, 2 = controlled
+    selectionMode = 0;      // 0 = soft, 1 = hard
     mu = 0.1;
     m = 0.05;
     s = -0.005;
-    phi = 0.9;
+    phi = 0.45;
 
     tot_demes = m1*m2;
     initial_colonized = starting_demes*m1;  
