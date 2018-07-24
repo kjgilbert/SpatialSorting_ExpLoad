@@ -4,6 +4,7 @@
  *
  * Created on February 27, 2012, 5:37 PM
  * Modified by Kim Gilbert, starting April 2017
+ * Modified by Kim Gilbert, for spatial sorting and dispersal evolution, starting July 2018
  */
 
 #include <cstdlib>
@@ -34,7 +35,7 @@ double fitnessConstant; // a global variable for scaling fitness
 int main(int argc, char* argv[]) {
  
   
- ///*  // comment this out for debug, and the part in parenthesis of main above  
+ /*  // comment this out for debug, and the part in parenthesis of main above  
     if ( argc != 2 )
     {                   // argc should be length 2 for correct execution
                         //spot 0 is the program name when running it in command line
@@ -46,37 +47,11 @@ int main(int argc, char* argv[]) {
     
     string fn = argv[1]; //filename for parameter inputs
     cout << fn; 
-//*/
-
-      
-//    fstream file;
-//    file.open(fn);
-    //your logic here
-//    file.close(); 
-    
-    
-/* find the path of the executable:
-    // Get the last position of '/'
-    std::string aux(argv[0]);
-    // get '/' or '\\' depending on unix/mac or windows.
-#if defined(_WIN32) || defined(WIN32)
-    int pos = aux.rfind('\\');
-#else
-    int pos = aux.rfind('/');
-#endif
-    // Get the path and the name
-    std::string path = aux.substr(0,pos+1);
-    std::string name = aux.substr(pos+1);
-    // show results
-    std::cout << "Path: " << path << std::endl;
-    std::cout << "Name: " << name << std::endl;
 */
+
     
     
-// find the path of the paramfile:
-// I think this one is the more useful because then I can put the outputs wherever the paramfile is stored
-   // Get the last position of '/'
-///*   // comment this out for debug
+/*   // comment this out for debug
     std::string aux(argv[1]);       
 
     // get '/' or '\\' depending on unix/mac or windows.
@@ -90,16 +65,11 @@ int main(int argc, char* argv[]) {
     std::string path = aux.substr(0,pos+1);
     std::string name = aux.substr(pos+1);
     // show results
-//*/    
+*/    
     
     
     
-    
-    
-    
-    
-    
-    
+
     
     
     
@@ -130,23 +100,11 @@ int main(int argc, char* argv[]) {
    else curSeed = randSeed;
    
    
-   // read in inputs from file
-   // otherwise give error that no input file found
-   
-   
-   
-   
-   
-   
-   
-   
    
    
    //__________________________________________________________________________
    
-   
    initializeRan3(curSeed);
-
        
     // parameters 
     
@@ -183,22 +141,10 @@ int main(int argc, char* argv[]) {
 
     
     
-   
-    
-    
-// read in the input file from the command line argument
-
-    //___________________________________________________________________
-    // Stephan's old code:
-    //      ifstream infile;
-    //      // this is the default input file, looks in working directory for this file
-    //      infile.open ("input_parameters.txt", ifstream::in);                            
-    //___________________________________________________________________
-//    char wd[250];           // the working directory defined in the input file
 
     
     // comment all this out for debug with hardcoded params
-///* 
+/* 
     double par;
     vector<double> params;          // character array to hold all the inputs from paramfile
     
@@ -215,7 +161,6 @@ int main(int argc, char* argv[]) {
             params.push_back(par);
     }
     
-
     if(params.size() > 18)
     {
         m1 = params[0];
@@ -247,9 +192,9 @@ int main(int argc, char* argv[]) {
     {
         cout << "\n MISSING REQUIRED NUMBER OF PARAMETERS, EXITING SIMULATION.\n";
     }
-//*/ 
+*/ 
 
-/*   uncomment this to debug and have hardcoded parameters
+///*   uncomment this to debug and have hardcoded parameters
     m1 = 5;
     m2 = 40;
     starting_demes = 5;
@@ -274,30 +219,11 @@ int main(int argc, char* argv[]) {
 
     tot_demes = m1*m2;
     initial_colonized = starting_demes*m1;  
-*/
+//*/
     
    loci = 2000;     // right now number of loci has to be hard coded in 
     
-/*
- * This code works, but I have yet to figure out how to parse it when it contains both text and integers, so for now sticking to Stephan's original implementation for input files
 
- *  // We assume argv[1] is a filename to open
-    ifstream the_file ( argv[1] );
-    // Always check to see if file opening succeeded
-    if ( !the_file.is_open() )
-      cout << "Could not open file\n";
-    else {
-      char contents;
-      // the_file.get ( contents ) returns false if the end of the file
-      //  is reached or an error occurs
-      while ( the_file.get ( contents ) )
-        cout<< contents;
-    }
-    // the_file is closed implicitly here
- */
-
-    
-    
     
     
     
@@ -401,7 +327,7 @@ int main(int argc, char* argv[]) {
         for (k = 0;k<expansion_start;k++)                                      
         {                        
             Grid2D.migrate(initial_colonized);                                       // migration        
-            Grid2D.reproduceBurnin(selectionMode, phi);                                // reproduction and selection     
+            Grid2D.reproduceBurnin(selectionMode, phi);                              // reproduction and selection     
         } 
         
     
@@ -507,7 +433,6 @@ int main(int argc, char* argv[]) {
                     outputfile4 << outdata[j] << " ";
                 }
                 outputfile4 << "\n";
-
             }
 
 
@@ -664,6 +589,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
-
-
