@@ -126,6 +126,7 @@ void Deme::reproduceSS(int wf)
     list<Individual>::iterator it;
     double r = 2;
     double mom_fit,dad_fit;
+    double mig_mom,mig_dad;
 
     
     bool front;
@@ -177,7 +178,8 @@ void Deme::reproduceSS(int wf)
                     advance(it,mom);
                     mom_fit = it->getRelativeFitness(s, h);
                     gamete_mom = it->getNewGamete(mutation_rate,s,front);
-                    
+                    mig_mom = it->getIndMigRate();
+                   
                 }while( mom_fit < randreal(0,max_fit));
 
                 do
@@ -187,12 +189,13 @@ void Deme::reproduceSS(int wf)
                     advance(it,dad);
                     dad_fit = it->getRelativeFitness(s, h);
                     gamete_dad = it->getNewGamete(mutation_rate,s,front);
+                    mig_dad = it->getIndMigRate();
                     
                 }while( dad_fit < randreal(0,max_fit));
         
               
                 //create new individual
-                ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setGenotype(gamete_mom,gamete_dad,mig_mom,mig_dad);
                
 ///                ind.setWFID(wf_cum);
 
@@ -457,6 +460,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
                     advance(it,dad);
                     dad_fit = it->getRelativeFitness(s, h);
                     gamete_dad = it->getNewGameteBurnin(mutation_rate,s, phi);
+
                     
                 }while( dad_fit < randreal(0,max_fit));
         

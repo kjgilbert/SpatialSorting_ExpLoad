@@ -35,7 +35,7 @@ Individual::Individual()
     }
     
     // set the initial mig rate -- make a function to set
-    setIndMigRate(ind_mig_rate);
+    setIndMigRate(ind_mig_rate);   // or SHOULD I SET THIS TO m???
     
     wf_ID = 1;
     
@@ -269,21 +269,21 @@ void Individual::setGenotype(heritableUnit g1,heritableUnit g2)
 {
     haplotypes[0] = g1.haplotype;
     haplotypes[1] = g2.haplotype;
-    
-//    mutations[0] = g1.muts;
-//    mutations[1] = g2.muts;
-    
-    /*mutations_d[0] = g1.m_d;
-    md_front[0] = g1.md_front;
-    mutations_b[0] = g1.m_b;
-    mb_front[0] = g1.mb_front;
-    
-    mutations_d[1] = g2.m_d;
-    md_front[1] = g2.md_front;
-    mutations_b[1] = g2.m_b;
-    mb_front[1] = g2.mb_front;*/
 }
- 
+
+void Individual::setGenotype(heritableUnit g1,heritableUnit g2,double mom_mig, double dad_mig)
+{
+    haplotypes[0] = g1.haplotype;
+    haplotypes[1] = g2.haplotype;
+    
+    // calculate the offspring's new migration rate
+    double off_m;
+    
+    off_m = (mom_mig + dad_mig) / 2 + 0;    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+    
+    // after calculating it, set the offspring's migration genotype to the new value
+    setIndMigRate(off_m);
+}
  
  
 double Individual::getFitness(double s)                                         // this is no longer used

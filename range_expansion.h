@@ -195,6 +195,7 @@ class Individual
         heritableUnit getNewGameteBurnin(double mu,double s,double phi);   // ignores beneficial mutations
         heritableUnit getNewGameteMM2(double mu1,double mu2,double s);     // mutation model with 2 alleles per locus
         void setGenotype(heritableUnit g1,heritableUnit g2);
+        void setGenotype(heritableUnit g1,heritableUnit g2, double mom_mig, double dad_mig);    // setGenotype when evolving migration
         double getFitness(double s);
         double getRelativeFitness(double s, double h);
         double getMaxFitness(double s);
