@@ -288,11 +288,11 @@ double Individual::getFitness(double s)                                         
 
 }
 
-double Individual::getRelativeFitness(double s)
+double Individual::getRelativeFitness(double s, double h)
 {
     double w = 1;
     int i;
-    float h = 0.3;                  // dominance is set here
+//    float h = 0.3;                  // dominance is set here
 //    float h;
     extern double fitnessConstant;  // this is the global variable for scaling fitness, defined in main.cpp
     

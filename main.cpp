@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     double m;                       // migration rate
     double mu;                      // genome-wide mut rate U
     double phi;                     // the proportion of occurring mutations that are DELETERIOUS - the rest will have the opposite seln coefficient (i.e. be beneficial)
-    float h;                        // dominance parameter
+    double h;                        // dominance parameter
     int snapshot;                   // number of generations between two snapshots of the whole metapopulation - it outputs data every 'snapshot' generations
     int m1,m2;                      // size of the 2D grid x = m2, y = m1 if you expand across the x-axis
     int replicates;                 // number of replicates of the simulation
@@ -300,7 +300,7 @@ int main(int argc, char* argv[]) {
     vector<double> tempdata2(tot_demes);  
     vector<double> trailing_edge(m1);              // the identity of the deme (for 1-D shifts) at the far left of the landscape, it will always be zero, as is defined below in the code
    
-    World Grid2D(m1,m2,initial_colonized,anc_pop_size,burnin_time,capacity,expansionMode,mu,s,m,phi);   // initialize world: grid size (m1,m2), number of initially colonized demes, 
+    World Grid2D(m1,m2,initial_colonized,anc_pop_size,burnin_time,capacity,expansionMode,mu,s,m,phi,h);   // initialize world: grid size (m1,m2), number of initially colonized demes, 
                                                                                                     // size of original population, burn in time of original population, capacity of demes, mode of intial colonization   
 
     //srand(time(NULL));  // add back in, maybe this was what made reps different
@@ -310,7 +310,7 @@ int main(int argc, char* argv[]) {
     {
         cout << "Beginning replicate " << rep+1 << "/" << replicates << endl;
                 
-        Grid2D.setParams(capacity,mu,s,m);
+        Grid2D.setParams(capacity,mu,s,m,h);
 // orig        sprintf(filename,"%s%d",base,rep);                              // these are the names of the outputs per rep, only need the one line the 2 below are for different cases, but the others could create separate file outputs for diff summ stats
 // orig        sprintf(filename2,"%s%s%d",base,"_hom-wt_rep_",rep);
 // orig        sprintf(filename3,"%s%s%d",base,"_het_rep_",rep);
@@ -330,7 +330,7 @@ int main(int argc, char* argv[]) {
         for (k = 0;k<expansion_start;k++)                                      
         {                        
             Grid2D.migrate(initial_colonized);                                       // migration        
-            Grid2D.reproduceBurnin(selectionMode, phi);                              // reproduction and selection     
+            Grid2D.reproduceBurnin(selectionMode, phi, h);                              // reproduction and selection     
         } 
         
     
@@ -585,7 +585,7 @@ int main(int argc, char* argv[]) {
         outputfile4.close();
      
 
-        Grid2D.clear(m1,m2,initial_colonized,anc_pop_size,burnin_time,capacity,expansionMode,mu,s,m,phi); 		// clear for next rep             
+        Grid2D.clear(m1,m2,initial_colonized,anc_pop_size,burnin_time,capacity,expansionMode,mu,s,m,phi,h); 		// clear for next rep             
 
         cout << "Finished replicate " << rep+1 << "/" << replicates << endl;
     }

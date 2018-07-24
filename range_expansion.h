@@ -65,16 +65,17 @@ class World
          int deltaWF;    
          vector<int> asc_loci;
          static double phi;
+         static double h;
          
  public:
         World();
-        World(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mu, double s, double m,double mut_prop);                
+        World(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mu, double s, double m,double mut_prop, double dom);                
         ~World();
         bool isColonized(int deme);
-        void clear(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop);
-        void reproduceBurnin(int mode, double phi);
-        void reproduceSSburnin(double phi);                     //reproduction plus soft selection
-        void reproduceHSburnin(double phi);                    // reproduction plus hard selection v1 - growth rate proportional to mean fit
+        void clear(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop, double dom);
+        void reproduceBurnin(int mode, double phi, double h);
+        void reproduceSSburnin(double phi, double h);                     //reproduction plus soft selection
+        void reproduceHSburnin(double phi, double h);                    // reproduction plus hard selection v1 - growth rate proportional to mean fit
         void reproduce(int mode);
         void reproduceSS();                     //reproduction plus soft selection
         void reproduceSSAM(); 
@@ -95,7 +96,7 @@ class World
         vector<double> getVarFit(vector<double> mean_fit);   
         vector<double> getStatDist();
         //vector<Count> getStatMut();
-        void setParams(int K,double mu, double s,double m);
+        void setParams(int K,double mu, double s,double mig, double h);
         void setCapacity(int K);
         //void updateWaveFront();
         void updateDistance();
@@ -113,6 +114,7 @@ class Deme
          static double m;
          int capacity; 
          static double s;                                                                 
+         static double h;                                                                 
          static double mutation_rate;
          double max_fit;
          int ID;
@@ -128,8 +130,8 @@ class Deme
         void reproduceSS(int wf); 
         void reproduceSSAM(int wf); 
         void reproduceHS1(double mean_fit,int wf);
-        void reproduceSSburnin(int wf,double phi); 
-        void reproduceHSburnin(double mean_fit,int wf,double phi);
+        void reproduceSSburnin(int wf,double phi, double h); 
+        void reproduceHSburnin(double mean_fit,int wf,double phi, double h);
         void select();
         void migrate();
         void print();
@@ -147,7 +149,7 @@ class Deme
         double getVarFit(double mean_fit);
         double getStatDist();
         int getAge();
-        void setParams(int K,double mig, double s,double mu);
+        void setParams(int K,double mu, double s,double mig, double h);
         void setParams(int K);
         void setID(int i);
         bool colonized();
@@ -191,7 +193,7 @@ class Individual
         heritableUnit getNewGameteMM2(double mu1,double mu2,double s);     // mutation model with 2 alleles per locus
         void setGenotype(heritableUnit g1,heritableUnit g2);
         double getFitness(double s);
-        double getRelativeFitness(double s);
+        double getRelativeFitness(double s, double h);
         double getMaxFitness(double s);
         double getMeanDistance();
         void print();

@@ -19,6 +19,7 @@ int World::colonized_demes = 1;
 int World::m1 = 100;
 int World::m2 = 100;
 double World::phi;
+double World::h;
 
 const int bn_size = 1000;
 const int bn_length = 10;
@@ -37,7 +38,7 @@ World::World()
    
 }
        
-World::World(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop)
+World::World(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop, double dom)
 {
      
    int i,j;
@@ -45,6 +46,7 @@ World::World(int length1,int length2,int initial_colonized,int initial_popsize,i
    m1 = length1;
    m2 = length2;
    phi = mut_prop;
+   h = dom;
    demes.resize(number_demes);
    migrants.resize(number_demes);
    Migrants propagule;
@@ -54,7 +56,7 @@ World::World(int length1,int length2,int initial_colonized,int initial_popsize,i
    
    int width, start;
    
-   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate);
+   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate,h);
       
    initial_population[0].colonize();
    initial_population[0].set_selection_dist(phi);
@@ -63,7 +65,7 @@ World::World(int length1,int length2,int initial_colonized,int initial_popsize,i
    
    for (i = 0; i < burnin_time ; i++)
    {
-       initial_population[0].reproduceSSburnin(0, phi);
+       initial_population[0].reproduceSSburnin(0, phi, h);
    }
    
    //bottleneck:
@@ -274,11 +276,12 @@ void World::setDemeCapacity(int deme_location,int capacity)
 }
 
 
-void World::clear(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop)
+void World::clear(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop, double dom)
 {
     int i,j;
     
     phi = mut_prop;
+    h = dom;
     
     demes.clear();
     migrants.clear();
@@ -294,7 +297,7 @@ void World::clear(int length1,int length2,int initial_colonized,int initial_pops
    
 
    cout << "\n Reinitializing ancestral population... ";
-   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate);
+   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate,h);
       
    initial_population[0].colonize();
    initial_population[0].set_selection_dist(phi);
@@ -302,7 +305,7 @@ void World::clear(int length1,int length2,int initial_colonized,int initial_pops
    
    for (i = 0; i < burnin_time ; i++)
    {
-       initial_population[0].reproduceSSburnin(0, phi);    // make the ancestral burnin time also have no beneficial mutations (and it's always soft selection)
+       initial_population[0].reproduceSSburnin(0, phi, h);    // make the ancestral burnin time also have no beneficial mutations (and it's always soft selection)
    }
    
    //bottleneck:
@@ -424,17 +427,17 @@ void World::clear(int length1,int length2,int initial_colonized,int initial_pops
 }
 
 
-void World::reproduceBurnin(int mode, double phi)
+void World::reproduceBurnin(int mode, double phi, double h)
 {
     vector<Deme>::iterator it;
     //updateWaveFront();
     if (mode == 0)
     {
-        reproduceSSburnin(phi); 
+        reproduceSSburnin(phi, h); 
     }
     else
     {   
-        reproduceHSburnin(phi);
+        reproduceHSburnin(phi, h);
     }
    
     
@@ -491,17 +494,17 @@ void World::reproduceHS1()
     }
 }
 
-void World::reproduceSSburnin(double phi)
+void World::reproduceSSburnin(double phi, double h)
 {
     vector<Deme>::iterator it;
     //updateWaveFront();
 
     for(it = demes.begin();it!=demes.end();it++)  
     {
-        it->reproduceSSburnin(wavefrontID, phi); 
+        it->reproduceSSburnin(wavefrontID, phi, h); 
     }
 }
-void World::reproduceHSburnin(double phi)
+void World::reproduceHSburnin(double phi, double h)
 {
     vector<Deme>::iterator it;
     double mean_fit;
@@ -509,7 +512,7 @@ void World::reproduceHSburnin(double phi)
     for(it = demes.begin();it!=demes.end();it++)  
     {
         mean_fit = it->getMeanFit();
-        it->reproduceHSburnin(mean_fit,wavefrontID, phi); 
+        it->reproduceHSburnin(mean_fit,wavefrontID, phi, h); 
     }
 }
 
@@ -841,9 +844,9 @@ vector<double> World::getInversionFrequency()
 }
 
 
-void World::setParams(int K,double mu,double s,double m)
+void World::setParams(int K,double mu,double s,double m, double h)
 {
-    demes[0].setParams(K,mu,s,m);
+    demes[0].setParams(K,mu,s,m,h);
 }
 
 

@@ -20,6 +20,7 @@ inline double max(double a, double b) { return (a < b) ? b : a; }
 
 double Deme::m = 0;
 double Deme::s = 0;
+double Deme::h = 0;
 double Deme::mutation_rate = 0;
 
 Deme::Deme()
@@ -38,6 +39,7 @@ void Deme::initialize()
     m = 0.01;
     capacity = 100;
     s = 0.01;
+    h = 0.5;
     mutation_rate = 0.01;
 }
 
@@ -137,7 +139,7 @@ void Deme::reproduceSS(int wf)
     
     for (it = this_generation.begin();it != this_generation.end();it++)
     {
-       max_fit = fmax(max_fit,it->getRelativeFitness(s));
+       max_fit = fmax(max_fit,it->getRelativeFitness(s, h));
     }
     
     
@@ -173,7 +175,7 @@ void Deme::reproduceSS(int wf)
                     mom = randint(0,this_generation.size()-1);    // draw parents with prob proportional to their fitnesses
                     it=this_generation.begin();
                     advance(it,mom);
-                    mom_fit = it->getRelativeFitness(s);
+                    mom_fit = it->getRelativeFitness(s, h);
                     gamete_mom = it->getNewGamete(mutation_rate,s,front);
                     
                 }while( mom_fit < randreal(0,max_fit));
@@ -183,7 +185,7 @@ void Deme::reproduceSS(int wf)
                     dad = randint(0,this_generation.size()-1); 
                     it=this_generation.begin();
                     advance(it,dad);
-                    dad_fit = it->getRelativeFitness(s);
+                    dad_fit = it->getRelativeFitness(s, h);
                     gamete_dad = it->getNewGamete(mutation_rate,s,front);
                     
                 }while( dad_fit < randreal(0,max_fit));
@@ -226,7 +228,7 @@ void Deme::reproduceSSAM(int wf)                     // soft selection plus asso
     
     for (it = this_generation.begin();it != this_generation.end();it++)
     {
-       max_fit = fmax(max_fit,it->getRelativeFitness(s));
+       max_fit = fmax(max_fit,it->getRelativeFitness(s, h));
     }
     
     
@@ -256,7 +258,7 @@ void Deme::reproduceSSAM(int wf)                     // soft selection plus asso
                 it=this_generation.begin();
                 advance(it,mom);
                 
-                mom_fit = it->getRelativeFitness(s);
+                mom_fit = it->getRelativeFitness(s, h);
                 
                 gamete_mom = it->getNewGameteMM2(mutation_rate,0,s);  
     
@@ -264,7 +266,7 @@ void Deme::reproduceSSAM(int wf)                     // soft selection plus asso
                 it=this_generation.begin();
                 advance(it,dad);
                 
-                dad_fit = it->getRelativeFitness(s);
+                dad_fit = it->getRelativeFitness(s, h);
                 
                 gamete_dad = it->getNewGameteMM2(mutation_rate,0,s); 
                 
@@ -309,7 +311,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
     
     for (it = this_generation.begin();it != this_generation.end();it++)
     {
-       max_fit = fmax(max_fit,it->getRelativeFitness(s));
+       max_fit = fmax(max_fit,it->getRelativeFitness(s, h));
     }
     
 
@@ -352,7 +354,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 it=this_generation.begin();
                 advance(it,mom);
                 
-                mom_fit = it->getRelativeFitness(s);
+                mom_fit = it->getRelativeFitness(s, h);
                 
                 gamete_mom = it->getNewGamete(mutation_rate,s,front); //getNewGameteMM2(mutation_rate,mutation_rate,s); 
     
@@ -360,7 +362,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 it=this_generation.begin();
                 advance(it,dad);
                 
-                dad_fit = it->getRelativeFitness(s);
+                dad_fit = it->getRelativeFitness(s, h);
                 
                 gamete_dad = it->getNewGamete(mutation_rate,s,front);//getNewGameteMM2(mutation_rate,mutation_rate,s); 
                 
@@ -380,7 +382,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
 }
 
 
-void Deme::reproduceSSburnin(int wf, double phi)
+void Deme::reproduceSSburnin(int wf, double phi, double h)
 {
     int no_ind,i;
     double expected_offspring;
@@ -406,7 +408,7 @@ void Deme::reproduceSSburnin(int wf, double phi)
     
     for (it = this_generation.begin();it != this_generation.end();it++)
     {
-       max_fit = fmax(max_fit,it->getRelativeFitness(s));
+       max_fit = fmax(max_fit,it->getRelativeFitness(s, h));
     }
     
     
@@ -443,7 +445,7 @@ void Deme::reproduceSSburnin(int wf, double phi)
                     mom = randint(0,this_generation.size()-1);    // draw parents with prob proportional to their fitnesses
                     it=this_generation.begin();
                     advance(it,mom);
-                    mom_fit = it->getRelativeFitness(s);
+                    mom_fit = it->getRelativeFitness(s, h);
                     gamete_mom = it->getNewGameteBurnin(mutation_rate,s, phi);
                     
                 }while( mom_fit < randreal(0,max_fit));
@@ -453,7 +455,7 @@ void Deme::reproduceSSburnin(int wf, double phi)
                     dad = randint(0,this_generation.size()-1); 
                     it=this_generation.begin();
                     advance(it,dad);
-                    dad_fit = it->getRelativeFitness(s);
+                    dad_fit = it->getRelativeFitness(s, h);
                     gamete_dad = it->getNewGameteBurnin(mutation_rate,s, phi);
                     
                 }while( dad_fit < randreal(0,max_fit));
@@ -471,7 +473,7 @@ void Deme::reproduceSSburnin(int wf, double phi)
     }
 }
 
-void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard selection
+void Deme::reproduceHSburnin(double mean_fit,int wf, double phi, double dom)		// hard selection
 {
     int no_ind,i;
     double expected_offspring;
@@ -496,7 +498,7 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard select
     
     for (it = this_generation.begin();it != this_generation.end();it++)
     {
-       max_fit = fmax(max_fit,it->getRelativeFitness(s));
+       max_fit = fmax(max_fit,it->getRelativeFitness(s, h));
     }
     
 
@@ -538,7 +540,7 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard select
                 it=this_generation.begin();
                 advance(it,mom);
                 
-                mom_fit = it->getRelativeFitness(s);
+                mom_fit = it->getRelativeFitness(s, h);
                 
                 gamete_mom = it->getNewGameteBurnin(mutation_rate,s,phi); //getNewGameteMM2(mutation_rate,mutation_rate,s); 
     
@@ -546,7 +548,7 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard select
                 it=this_generation.begin();
                 advance(it,dad);
                 
-                dad_fit = it->getRelativeFitness(s);
+                dad_fit = it->getRelativeFitness(s, h);
                 
                 gamete_dad = it->getNewGameteBurnin(mutation_rate,s,phi);//getNewGameteMM2(mutation_rate,mutation_rate,s); 
                 
@@ -655,7 +657,7 @@ void Deme::printStat()
     
     for (it = this_generation.begin();it!=this_generation.end();it++)
     {
-        mean_fit += it->getRelativeFitness(s);
+        mean_fit += it->getRelativeFitness(s, h);
     }
 
     
@@ -671,9 +673,7 @@ void Deme::printStat()
     }
     
     cout <<  "\nMean fitness in ancestral population  " << mean_fit ;
-    
     cout << "\n Number of individuals in ancestral population:  " << this_generation.size() << "\n";
-    
     cout << " Number of mutations in ancestral population:  " << number_muts << "\n";
 }
 
@@ -685,7 +685,7 @@ double Deme::getMeanFit()
     
     for (it = this_generation.begin();it!=this_generation.end();it++)
     {
-        mean_fit += it->getRelativeFitness(s);
+        mean_fit += it->getRelativeFitness(s, h);
     }
     
     mean_fit /= this_generation.size();
@@ -706,7 +706,7 @@ double Deme::getVarFit(double mean_fit)
     
     for (it = this_generation.begin();it!=this_generation.end();it++)
     {
-        var_fit += pow(log(mean_fit) - log(it->getRelativeFitness(s)),2);
+        var_fit += pow(log(mean_fit) - log(it->getRelativeFitness(s, h)),2);
     }
     
     var_fit /= (this_generation.size()-1);
@@ -777,12 +777,13 @@ double Deme::getHeterozygosity(vector<int> a_loci,int loci_begin,int loci_end)
     return(het);
 }
 
-void Deme::setParams(int K,double mu,double sel,double mig)
+void Deme::setParams(int K,double mu,double sel,double mig, double dom)
 {
         m=mig;
         capacity=K;
         s=sel;
-        mutation_rate=mu;    
+        mutation_rate=mu; 
+        h=dom;
 }
 
 
