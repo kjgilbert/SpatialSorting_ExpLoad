@@ -16,13 +16,7 @@ int Individual::loci = 2000;
 double Individual::rrate = 0.5; 
 vector<int> Individual::used_loci;
 vector<float> Individual::s_coeff;
-//double phi = 0.9;                   // right now it is hard-coded that every mutation is deleterious
-//unsigned long long Individual::counter = 0;
 
-//inline double rand_unif(double x0, double x1)
-//{
-//return x0 + (x1 - x0) * rand() / ((double) RAND_MAX);
-//}
 
 inline int max(int a, int b) { return (a < b) ? b : a; }
 inline int min(int a, int b) { return (a < b) ? a : b; }
@@ -135,7 +129,7 @@ heritableUnit Individual::getNewGamete(double mu,double s,bool front)           
             hap_new[site] = 1; // when 2000 loci (last 1000 neutral), selected loci have no back mutation but neutral do
         }else{
             hap_new[site] = 1 - hap_new[site];  // when 2000 loci (last 1000 neutral), neutral muts have back-mut
-            //!hap_new[site];    // doesn't seem to properly work for back mutations?t
+            //!hap_new[site];    // doesn't seem to properly work for back mutations?
        }
         //hap_new[site] = 1;//!hap_new[site]; // this is where back-mutation happens, to get rid of it, set it as 1 so it doens't back mutate
     } 
@@ -319,14 +313,10 @@ double Individual::getRelativeFitness(double s)
        }
 ////                                                                                // mutliplicative effects  
 //        if(haplotypes[0][i]) w *= (1-s);
-//        if(haplotypes[1][i]) w *= (1-s); <- 
-       
-        
+//        if(haplotypes[1][i]) w *= (1-s); <-      
         
 //         w *= (1-( (haplotypes[1][i]+haplotypes[0][i])* s_coeff[i]/2 ) );                       // additive effects
     }  
-    
-
 
     return(w / fitnessConstant); //use the global variable to scale fitness (so that we can compare across h cases)
 }
@@ -359,8 +349,6 @@ void Individual::setParams(int number_loci)
 }
 
 
- 
-
 
 
 
@@ -390,7 +378,6 @@ double Individual::getWFID()
 vector<double> Individual::getSumAlleles(int loci_begin,int loci_end)
 {
     vector<double> p;
-    
     
     p.resize(loci_end);
         

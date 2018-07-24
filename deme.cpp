@@ -15,21 +15,10 @@
 
 
 using namespace std;
-//
-//inline double rand_unif(double x0, double x1)
-//{
-//return x0 + (x1 - x0) * rand() / ((double) RAND_MAX);
-//}
-
-//inline int rand_n(int n)
-//{
-//return rand()%n;
-//}
 
 inline double max(double a, double b) { return (a < b) ? b : a; }
 
 double Deme::m = 0;
-//int Deme::capacity = 10;
 double Deme::s = 0;
 double Deme::mutation_rate = 0;
 
@@ -84,14 +73,10 @@ void Deme::reproduce(int wf)
     //cout << "test: " <<this_generation.size() << " " << no_ind;
     if (no_ind > 0)
     {
-    
-        
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   // Demes are filled immediately
     
         expected_offspring = no_ind * (r/(1 + (double)(no_ind*(r-1))/capacity));  // beverton-holt
-        
         
         //realized offspring is obtained from a Poisson distribution
         realized_offspring = randpois(expected_offspring);    
@@ -156,24 +141,20 @@ void Deme::reproduceSS(int wf)
     }
     
     
-    //cout << "test: " <<this_generation.size() << " " << no_ind;
     if (no_ind > 0)
     {
         age++;
         
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   //demes are filled immediately
     
         expected_offspring = no_ind * (r/(1 + (double)(no_ind*(r-1))/capacity));  // beverton-holt
-        
         
         //realized offspring is obtained from a poisson distribution
         if (expected_offspring > 0)
         {
                 realized_offspring = randpois(expected_offspring);   
         }
-        
         else 
         {
             realized_offspring = 0;
@@ -249,11 +230,9 @@ void Deme::reproduceSSAM(int wf)                     // soft selection plus asso
     }
     
     
-    //cout << "test: " <<this_generation.size() << " " << no_ind;
     if (no_ind > 0)
     {
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   //demes are filled immediately
     
         expected_offspring = no_ind * (r/(1 + (double)(no_ind*(r-1))/capacity));  // beverton-holt
@@ -291,7 +270,6 @@ void Deme::reproduceSSAM(int wf)                     // soft selection plus asso
                 
                 //create new individual
                 ind.setGenotype(gamete_mom,gamete_dad);
-                
                 
         
                 if (dad_fit > randreal(0,max_fit) && mom_fit > randreal(0,max_fit) && (pow(abs(dad_fit - mom_fit),a) < randreal(0,1)) ) 
@@ -340,9 +318,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
     //cout << "test: " <<this_generation.size() << " " << no_ind;
     if (no_ind > 0)
     {
-    
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   //demes are filled immediately
     
         expected_offspring = max(0,no_ind * (r/(1 + (double)(no_ind*(r-1))/K)));  // beverton-holt
@@ -360,7 +336,6 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
         }
         
   
-        
         
         //no stochastic fluctuations in demography
         //realized_offspring = expected_offspring;
@@ -391,7 +366,6 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 
                 //create new individual
                 ind.setGenotype(gamete_mom,gamete_dad);
-                
                 
                 
                 if (dad_fit > randreal(0,max_fit) && mom_fit > randreal(0,max_fit)) 
@@ -442,7 +416,6 @@ void Deme::reproduceSSburnin(int wf, double phi)
         age++;
         
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   //demes are filled immediately
     
         expected_offspring = no_ind * (r/(1 + (double)(no_ind*(r-1))/capacity));  // beverton-holt
@@ -453,7 +426,6 @@ void Deme::reproduceSSburnin(int wf, double phi)
         {
                 realized_offspring = randpois(expected_offspring);   
         }
-        
         else 
         {
             realized_offspring = 0;
@@ -465,7 +437,6 @@ void Deme::reproduceSSburnin(int wf, double phi)
         for (i = 0;i<realized_offspring;)
         {
                 // generate new individual
-
                 // create new gametes from parents
                 do
                 {
@@ -487,7 +458,6 @@ void Deme::reproduceSSburnin(int wf, double phi)
                     
                 }while( dad_fit < randreal(0,max_fit));
         
-              
                 //create new individual
                 ind.setGenotype(gamete_mom,gamete_dad);
                
@@ -535,9 +505,7 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard select
     //cout << "test: " <<this_generation.size() << " " << no_ind;
     if (no_ind > 0)
     {
-    
         //calculate expected number of offspring 
-        
         //expected_offspring = capacity;   //demes are filled immediately
     
         expected_offspring = max(0,no_ind * (r/(1 + (double)(no_ind*(r-1))/K)));  // beverton-holt
@@ -553,8 +521,6 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi)		// hard select
         {
             realized_offspring = randpois(expected_offspring);    
         }
-        
-  
         
         
         //no stochastic fluctuations in demography
@@ -760,11 +726,6 @@ double Deme::getDemeDensity()
     
     list<Individual>::iterator it;
     
-//    for (it = this_generation.begin();it!=this_generation.end();it++)   // DO I NEED THIS FOR LOOP? I THINK I CAN DELETE
-//    {
-//        mean_fit += it->getRelativeFitness(s);
-//    }
-    
     deme_density = this_generation.size();
     
     if (deme_density != deme_density) 
@@ -825,7 +786,6 @@ void Deme::setParams(int K,double mu,double sel,double mig)
 }
 
 
-
 void Deme::setParams(int K)
 {    
     capacity=K;    
@@ -842,8 +802,6 @@ bool Deme::colonized()
         return true;
     else return false; 
 }
-
-    
 
 
 int Deme::getSize()
@@ -1015,7 +973,6 @@ vector<int> Deme::getAscLociSample(int loci_begin,int loci_end,int n)           
     
     
     
-    
     for (int i = 0;i< loci_end; i++)
     {
        p[i] = p[i]/(2*n); 
@@ -1082,7 +1039,6 @@ vector<double> Deme::getGenotypeFrequencies(int loci_begin,int loci_end,int geno
              p[i] = p[i] + q[i]; 
         }
     }
-    
     
     
     for (int i = 0;i< loci; i++)

@@ -23,19 +23,12 @@ class World;
 class Deme;
 class Individual;
 
-
 typedef map<int,float> MutationBag;
-
 typedef vector<bool> Loci; 
-
 typedef vector<MutationBag> MutationHaploList;
-
 typedef vector<int> Distance;
-
 typedef vector<double> Count;
-
 typedef vector<Individual> Migrants; 
-
 
 
 struct heritableUnit
@@ -46,7 +39,7 @@ struct heritableUnit
         //Distance d;
         //MutationHaploList muts;
                 
-       /* Count m_d;          // total number of deleterious mutations
+       /* Count m_d;         // total number of deleterious mutations
         Count md_front;    //  number of mutations that originated at the front
         
         Count m_b;         // same for beneficial ones
@@ -56,7 +49,6 @@ struct heritableUnit
         //double mig;
             
 };
-
 
 
 class World
@@ -110,7 +102,6 @@ class World
         void setDemeCapacity(int bn_location, int capacity);
         //void ResetMutationOrigin();
         double sample_wfID(int location);
-      
 };
 
 
@@ -167,8 +158,6 @@ class Deme
         void normalizeFitness();
         vector<int> getAscLoci(int loci_begin,int loci_end);
         vector<int> getAscLociSample(int loci_begin,int loci_end,int n);
-        
-        
 };
 
 
@@ -219,11 +208,7 @@ class Individual
         double getInversionCount();
         
         //Count getMutationCount();
-        //void ResetMutationOrigin();
-        
-        
-
-        
+        //void ResetMutationOrigin();    
 };
 
 //#ifdef	__cplusplus

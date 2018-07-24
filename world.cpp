@@ -23,10 +23,7 @@ double World::phi;
 const int bn_size = 1000;
 const int bn_length = 10;
 
-//inline int rand_n(int n)
-//{
-//        return rand()%n;
-//}
+
 
 World::World()
 {
@@ -860,61 +857,6 @@ void World::setCapacity(int K)
     }
 }
 
-/*void World::updateWaveFront()
-{
-    int i = 0;
-    int wf=0;
-    
-    for(i=0;i<number_demes;i++)
-    {
-        if(demes[i].getSize()>0)
-        {wf++;}
-    }
-    
-    //while (demes[i].colonized())
-    //{
-        
-     //  i++;
-    
-    //}
-    
-    wavefrontID = wf-1;
-    //cout<< '\n' << wavefrontID;
-    
-    //updateDistance();
-    
-}
-
-*/
-
-
-
-/*vector<Count> World::getStatMut()
-{
-    vector<Deme>::iterator it;
-    vector<Count> data;
-    
-    
-    for(it = demes.begin();it!=demes.end();it++)  
-    {
-        data.push_back(it->getStatMut()); 
-    }
-    
-    return(data);
-}*/
-
-
-/*void World::ResetMutationOrigin()
-{
-    vector<Deme>::iterator it;
-    
-    
-    for(it = demes.begin();it!=demes.end();it++)  
-    {
-        it->ResetMutationOrigin(); 
-    } 
-    
-}*/
 
 double World::sample_wfID(int location)
 {

@@ -117,6 +117,7 @@ int main(int argc, char* argv[]) {
     double m;                       // migration rate
     double mu;                      // genome-wide mut rate U
     double phi;                     // the proportion of occurring mutations that are DELETERIOUS - the rest will have the opposite seln coefficient (i.e. be beneficial)
+    float h;                        // dominance parameter
     int snapshot;                   // number of generations between two snapshots of the whole metapopulation - it outputs data every 'snapshot' generations
     int m1,m2;                      // size of the 2D grid x = m2, y = m1 if you expand across the x-axis
     int replicates;                 // number of replicates of the simulation
@@ -161,7 +162,7 @@ int main(int argc, char* argv[]) {
             params.push_back(par);
     }
     
-    if(params.size() > 18)
+    if(params.size() > 19)
     {
         m1 = params[0];
         m2 = params[1];
@@ -184,6 +185,7 @@ int main(int argc, char* argv[]) {
         m = params[16];
         s = params[17];
         phi = params[18];
+        h = params[19];
 
         tot_demes = m1*m2;
         initial_colonized = starting_demes*m1;  
@@ -200,10 +202,10 @@ int main(int argc, char* argv[]) {
     starting_demes = 5;
     niche_width = 5;
     capacity = 25;
-    anc_pop_size = 5000;
+    anc_pop_size = 2500;
     
     burnin_time = 10;
-    expansion_start = 250;
+    expansion_start = 25;
     theta = 5;
     generations = 10;
     snapshot = 10;
@@ -216,6 +218,7 @@ int main(int argc, char* argv[]) {
     m = 0.05;
     s = -0.005;
     phi = 0.45;
+    h = 0.5;
 
     tot_demes = m1*m2;
     initial_colonized = starting_demes*m1;  
