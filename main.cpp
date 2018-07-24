@@ -329,8 +329,8 @@ int main(int argc, char* argv[]) {
 
         for (k = 0;k<expansion_start;k++)                                      
         {                        
-            Grid2D.migrate(initial_colonized);                                       // migration        
-            Grid2D.reproduceBurnin(selectionMode, phi, h);                              // reproduction and selection     
+            Grid2D.migrateNoEvolve(initial_colonized);                                       // migration  ** BUT MIGHT WANT IT TO EVOLVE STILL ON THE LANDSCAPE? To have some variation at the start of expansion      
+            Grid2D.reproduceBurnin(selectionMode, phi, h);                           // reproduction and selection     
         } 
         
     
@@ -459,8 +459,8 @@ int main(int argc, char* argv[]) {
                     
 
             // then normal simulation routines proceed for the rest of this generation
-            Grid2D.migrate(tot_demes); // migration        
-            Grid2D.reproduce(selectionMode); // reproduction and selection     
+            Grid2D.migrate(tot_demes);          // migration        
+            Grid2D.reproduce(selectionMode);    // reproduction and selection     
  
         }
 

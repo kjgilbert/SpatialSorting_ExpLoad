@@ -590,15 +590,37 @@ void Deme::select()			// old function for viability seln
     }
 }
 
-Migrants Deme::getMigrants()
+Migrants Deme::getMigrantsNoEvolve()
 {
     list<Individual>::iterator it;
     Migrants migrants;
+    double indMigRate;
     
     //pick migrants, remove migrants from original deme
     for (it = this_generation.begin(); it != this_generation.end(); )
     {
-        if (randreal(0,1)<m) {migrants.push_back(*it); it = this_generation.erase(it); }
+        if (randreal(0,1)<indMigRate) {migrants.push_back(*it); it = this_generation.erase(it); } // original migration function randomly chooses m proportion of migrants out of the population
+        else    {it++; }
+    }
+    
+    return(migrants);
+}
+
+Migrants Deme::getMigrants()
+{
+    list<Individual>::iterator it;
+    Migrants migrants;
+    double indMigRate;
+    
+    //pick migrants, remove migrants from original deme
+    for (it = this_generation.begin(); it != this_generation.end(); )
+    {
+        // put a function here that recalculates m per individual
+        indMigRate = it->getIndMigRate();
+        
+        cout << "test what is mig rate " << indMigRate << endl;
+        
+        if (randreal(0,1)<indMigRate) {migrants.push_back(*it); it = this_generation.erase(it); } // original migration function randomly chooses m proportion of migrants out of the population
         else    {it++; }
     }
     

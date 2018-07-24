@@ -517,6 +517,64 @@ void World::reproduceHSburnin(double phi, double h)
 }
 
 
+void World::migrateNoEvolve(int range)     
+{ 
+    vector<Deme>::iterator it;
+    Migrants::iterator m_it;
+    Individual ind;
+   
+    int i=0;
+    int j;
+    int width;
+    int mig_distance,destination;   // number of demes an individual migrates and location to which an individual migrates
+   
+    width = floor(range/m1);
+   //get a vector of migrants, migrants[i] contains the emigrants of deme i -- doesn't seem to let me iterate specific i's out of order
+   it = demes.begin();
+   for(i = 0; i<(m1*m2); i++)
+   {
+       migrants[i] = it->getMigrantsNoEvolve();
+       it++;
+   }
+
+    //distribute the emigrants according to migration pattern
+    for(i=0;i<width;i++)
+    {
+        for(j=0;j<m1;j++)
+        {
+            for(m_it = migrants[(j*m2+i)].begin();m_it!=migrants[(j*m2+i)].end();m_it++)  
+            {
+                destination = (j*m2+i)+randint(0,1)*2-1;              // nearest neighbor migration: migrate to deme i - 1 or i + 1, each with prob 1/2
+              
+                //destination = (j*m2+i) + (randint(0,1)*2-1) * (1+(int)(randexp(1/5)));                 // Poisson distribution  
+              
+                // 2D grid 
+                mig_distance = randint(0,1);
+              
+                mig_distance = (mig_distance * 2 -1);
+              
+                if(randreal(0,1)<0.5)
+                {
+                    mig_distance =  mig_distance*m2;
+                }
+              
+                destination = (j*m2+i) + mig_distance;
+              
+                // reflecting boundaries     
+                if (destination<0) {destination=(j*m2+i);}                                      // don't go negative, i.e. below deme 0 or off the top edge                        
+                if (destination>=(m1*m2)) {destination=(j*m2+i);}                               // don't go beyond last deme on landscape
+                if ((destination>=(j*m2+width))&&(mig_distance<m2)) {destination = (j*m2+i);}   // don't migrate beyond the burn-in barrier or off the bottom edge
+                if ((((j*m2+i)%m2)==0)&&(mig_distance==-1)) {destination = (j*m2+i);}           // don't migrate from the left edge core to the right edge
+                if ((((j*m2+i)%m2)==(m2-1))&&(mig_distance==1)) {destination = i;}              // don't migrate from the right edge back into the core
+
+                //cout << "final dest " << destination << endl;
+                ind = *m_it;
+                demes[destination].addMigrant(*m_it);
+            }
+        }
+    }
+}
+
 void World::migrate(int range)     
 { 
     vector<Deme>::iterator it;

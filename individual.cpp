@@ -34,6 +34,9 @@ Individual::Individual()
         used_loci[i] = i;
     }
     
+    // set the initial mig rate -- make a function to set
+    setIndMigRate(ind_mig_rate);
+    
     wf_ID = 1;
     
     ancestors = 0;
@@ -322,6 +325,16 @@ double Individual::getRelativeFitness(double s, double h)
 }
 
 
+void Individual::setIndMigRate(double m)
+{
+    ind_mig_rate = m;
+}
+
+double Individual::getIndMigRate()
+{
+    return(ind_mig_rate);
+}
+
 
 double Individual::getMaxFitness(double s)
 {
@@ -409,12 +422,12 @@ vector<double> Individual::getSumGenotypes(int loci_begin,int loci_end,int genot
     return(p);
 }
 
-double Individual::getInversionCount()                                     // not used anymore
+double Individual::getInversionCount()
 {
     return(haplotypes[0][loci]+haplotypes[1][loci]);
 }
 
-void Individual::normalizeFitness(double mean_fit)                              // not used anymore
+void Individual::normalizeFitness(double mean_fit)
 {
 
 }

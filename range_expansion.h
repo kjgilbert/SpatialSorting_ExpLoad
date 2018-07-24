@@ -81,6 +81,7 @@ class World
         void reproduceSSAM(); 
         void reproduceHS1();                    // reproduction plus hard selection v1 - growth rate proportional to mean fit
         void select();
+        void migrateNoEvolve(int range);
         void migrate(int range);
         void print();
         void printStat();
@@ -135,6 +136,7 @@ class Deme
         void select();
         void migrate();
         void print();
+        Migrants getMigrantsNoEvolve();
         Migrants getMigrants();
         Migrants sampleIndividuals(int samplesize);
         void addMigrant(Individual);
@@ -183,6 +185,7 @@ class Individual
          static vector<float> s_coeff;
          double wf_ID;
          int ancestors;
+         double ind_mig_rate;
          
  public:
         Individual();
@@ -208,6 +211,8 @@ class Individual
         void normalizeFitness(double co);
         unsigned long getNumberMutations();
         double getInversionCount();
+        void setIndMigRate(double ind_mig_rate);
+        double getIndMigRate();
         
         //Count getMutationCount();
         //void ResetMutationOrigin();    
