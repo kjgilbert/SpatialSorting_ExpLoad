@@ -301,6 +301,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
     double r = 2;
     double K = capacity;
     double mom_fit,dad_fit;
+    double mig_mom,mig_dad;
     bool front;
     
     front = (ID >= (wf-1));
@@ -360,6 +361,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 mom_fit = it->getRelativeFitness(s, h);
                 
                 gamete_mom = it->getNewGamete(mutation_rate,s,front); //getNewGameteMM2(mutation_rate,mutation_rate,s); 
+                mig_mom = it->getIndMigRate();
     
         
                 it=this_generation.begin();
@@ -368,9 +370,10 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 dad_fit = it->getRelativeFitness(s, h);
                 
                 gamete_dad = it->getNewGamete(mutation_rate,s,front);//getNewGameteMM2(mutation_rate,mutation_rate,s); 
+                mig_dad = it->getIndMigRate();
                 
                 //create new individual
-                ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setGenotype(gamete_mom,gamete_dad,mig_mom,mig_dad);
                 
                 
                 if (dad_fit > randreal(0,max_fit) && mom_fit > randreal(0,max_fit)) 

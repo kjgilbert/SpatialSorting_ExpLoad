@@ -35,7 +35,7 @@ Individual::Individual()
     }
     
     // set the initial mig rate -- make a function to set
-    setIndMigRate(ind_mig_rate);   // or SHOULD I SET THIS TO m???
+    setIndMigRate(0.1);   // or SHOULD I SET THIS TO m???
     
     wf_ID = 1;
     
