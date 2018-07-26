@@ -853,17 +853,15 @@ void Deme::setParams(int K,double mu,double sel,double mig, double dom)
 void Deme::setDemeMigRate(double m){
     
     list<Individual>::iterator it;
-    double dummy;
     
     it = this_generation.begin();
-    it->setIndMigRate(m);
-    dummy =it->getIndMigRate();
+    it->setIndMigRate(m);   // there is only one deme for the ancestral pop so can just have this line and remove the below
     
-    for (it = this_generation.begin();it!=this_generation.end();it++)
-    {
-        it->setIndMigRate(m);
-        dummy =it->getIndMigRate();
-    }
+    // these are repetitive (above and below commands)
+    //for (it = this_generation.begin();it!=this_generation.end();it++)
+    //{
+    //    it->setIndMigRate(m);
+    //}
 }
 
 
