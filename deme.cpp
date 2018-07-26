@@ -127,6 +127,7 @@ void Deme::reproduceSS(int wf)
     double r = 2;
     double mom_fit,dad_fit;
     double mig_mom,mig_dad,off_m;
+    double mig_mut_sd = 0.005;
 
     
     bool front;
@@ -195,7 +196,7 @@ void Deme::reproduceSS(int wf)
         
               
                 // calculate the offspring's new migration rate
-                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, mig_mut_sd);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
                 if(off_m > 0.5) off_m = 0.5;
                 if(off_m < 0) off_m = 0;
     
@@ -314,6 +315,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
     double K = capacity;
     double mom_fit,dad_fit;
     double mig_mom,mig_dad,off_m;
+    double mig_mut_sd = 0.005;
     bool front;
     
     front = (ID >= (wf-1));
@@ -385,7 +387,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 mig_dad = it->getIndMigRate();
                 
                 // calculate the offspring's new migration rate
-                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, mig_mut_sd);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
                 if(off_m > 0.5) off_m = 0.5;
                 if(off_m < 0) off_m = 0;
     
@@ -423,6 +425,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
     extern double fitnessConstant;
     fitnessConstant = 1;
     double mig_mom,mig_dad,off_m;
+    double mig_mut_sd = 0.005;
 
     
     bool front;
@@ -475,7 +478,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
                     advance(it,mom);
                     mom_fit = it->getRelativeFitness(s, h);
                     gamete_mom = it->getNewGameteBurnin(mutation_rate,s, phi);
-                    mig_dad = it->getIndMigRate();
+                    mig_mom = it->getIndMigRate();
                     
                 }while( mom_fit < randreal(0,max_fit));
 
@@ -492,7 +495,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
                 }while( dad_fit < randreal(0,max_fit));
         
                 // calculate the offspring's new migration rate
-                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, mig_mut_sd);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
                 if(off_m > 0.5) off_m = 0.5;
                 if(off_m < 0) off_m = 0;
     
@@ -525,6 +528,8 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi, double dom)		//
     double K = capacity;
     double mom_fit,dad_fit;
     bool front;
+    double mig_mom,mig_dad,off_m;
+    double mig_mut_sd = 0.005;
     
     front = (ID >= (wf-1));
     
@@ -582,6 +587,7 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi, double dom)		//
                 mom_fit = it->getRelativeFitness(s, h);
                 
                 gamete_mom = it->getNewGameteBurnin(mutation_rate,s,phi); //getNewGameteMM2(mutation_rate,mutation_rate,s); 
+                mig_mom = it->getIndMigRate();
     
         
                 it=this_generation.begin();
@@ -590,9 +596,18 @@ void Deme::reproduceHSburnin(double mean_fit,int wf, double phi, double dom)		//
                 dad_fit = it->getRelativeFitness(s, h);
                 
                 gamete_dad = it->getNewGameteBurnin(mutation_rate,s,phi);//getNewGameteMM2(mutation_rate,mutation_rate,s); 
+                mig_dad = it->getIndMigRate();
                 
+                // calculate the offspring's new migration rate
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, mig_mut_sd);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                if(off_m > 0.5) off_m = 0.5;
+                if(off_m < 0) off_m = 0;
+    
+    
+
                 //create new individual
                 ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setIndMigRate(off_m);
                 
                 
                 
@@ -657,7 +672,7 @@ Migrants Deme::getMigrants()
         // put a function here that recalculates m per individual
         indMigRate = it->getIndMigRate();
         
-        cout << "test what is mig rate " << indMigRate << endl;
+        //cout << "test what is mig rate " << indMigRate << endl;
         
         if (randreal(0,1)<indMigRate) {migrants.push_back(*it); it = this_generation.erase(it); } // original migration function randomly chooses m proportion of migrants out of the population
         else    {it++; }
