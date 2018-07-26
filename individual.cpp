@@ -34,8 +34,60 @@ Individual::Individual()
         used_loci[i] = i;
     }
     
+    wf_ID = 1;
+    
+    ancestors = 0;
+
+    /*mutations_b.resize(2);
+    mb_front.resize(2);
+    mutations_d.resize(2);
+    md_front.resize(2);*/
+    
+    haplotypes[0].resize(loci);
+    haplotypes[1].resize(loci);
+    
+    //mutations[0].resize(loci);
+    //mutations[1].resize(loci);
+    
+    /*mutations_b[0].resize(loci);
+    mb_front[0].resize(loci);
+    mutations_d[0].resize(loci);
+    md_front[0].resize(loci);
+ 
+    mutations_b[1].resize(loci);
+    mb_front[1].resize(loci);
+    mutations_d[1].resize(loci);
+    md_front[1].resize(loci); */
+    
+    fill_n(haplotypes[0].begin(),loci,0);
+    fill_n(haplotypes[1].begin(),loci,0);
+
+    
+   /* fill_n(mutations_d[0].begin(),loci,0);
+    fill_n(md_front[0].begin(),loci,0);
+    fill_n(mutations_b[0].begin(),loci,0);
+    fill_n(mb_front[0].begin(),loci,0);
+    
+    fill_n(mutations_d[1].begin(),loci,0);
+    fill_n(md_front[1].begin(),loci,0);
+    fill_n(mutations_b[1].begin(),loci,0);
+    fill_n(mb_front[1].begin(),loci,0);*/
+}
+
+Individual::Individual(double m)
+{
+    haplotypes.resize(2);
+    //mutations.resize(2);
+    
+    used_loci.resize(loci);
+    
+    for(int i = 0; i < loci; i++)
+    {
+        used_loci[i] = i;
+    }
+    
     // set the initial mig rate -- make a function to set
-    setIndMigRate(0.1);   // or SHOULD I SET THIS TO m???
+    setIndMigRate(m);   // or SHOULD I SET THIS TO m???
     
     wf_ID = 1;
     
@@ -269,20 +321,6 @@ void Individual::setGenotype(heritableUnit g1,heritableUnit g2)
 {
     haplotypes[0] = g1.haplotype;
     haplotypes[1] = g2.haplotype;
-}
-
-void Individual::setGenotype(heritableUnit g1,heritableUnit g2,double mom_mig, double dad_mig)
-{
-    haplotypes[0] = g1.haplotype;
-    haplotypes[1] = g2.haplotype;
-    
-    // calculate the offspring's new migration rate
-    double off_m;
-    
-    off_m = (mom_mig + dad_mig) / 2 + 0;    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
-    
-    // after calculating it, set the offspring's migration genotype to the new value
-    setIndMigRate(off_m);
 }
  
  

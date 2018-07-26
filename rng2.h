@@ -29,6 +29,10 @@ extern double randexp(const double & lambda);
 // Returns a random deviate from an exponential distribution with parameter lambda
 extern double randpois(const double & lambda);
 
+// trying to draw a random normally distributed number for mutation during migration inheritance
+extern double rand_normal(double mean, double stddev);
+
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------

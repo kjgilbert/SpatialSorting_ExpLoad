@@ -140,6 +140,7 @@ class Deme
         Migrants getMigrants();
         Migrants sampleIndividuals(int samplesize);
         void addMigrant(Individual);
+        void setDemeMigRate(double m);
         void printStat();
         double getMeanFit();
         double getDemeDensity(); // added KJG
@@ -189,6 +190,7 @@ class Individual
          
  public:
         Individual();
+        Individual(double m);
         ~Individual();
         void set_selection_dist(double s,double mut_prop);
         heritableUnit getNewGamete(double mu,double s,bool front);         // infinite sites within recombining regions

@@ -27,20 +27,16 @@ const int bn_length = 10;
 
 
 World::World()
-{
-    
+{  
    int i;
    demes.resize(number_demes);
    migrants.resize(number_demes);
    
    for(i=0;i<colonized_demes;i++) {demes[i].colonize();}  
-   
-   
 }
        
 World::World(int length1,int length2,int initial_colonized,int initial_popsize,int burnin_time,int capacity,int mode,double mutation_rate,double s,double migration_rate,double mut_prop, double dom)
 {
-     
    int i,j;
    number_demes = length1*length2;
    m1 = length1;
@@ -53,16 +49,18 @@ World::World(int length1,int length2,int initial_colonized,int initial_popsize,i
    vector<Individual>::iterator it;
    initial_population.resize(1);
   
-   
+   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate,h);
+
    int width, start;
    
-   initial_population[0].setParams(initial_popsize,mutation_rate,s,migration_rate,h);
+  
       
    initial_population[0].colonize();
+   initial_population[0].setDemeMigRate(migration_rate);
    initial_population[0].set_selection_dist(phi);
    demes[1].set_selection_dist(phi);
    
-   
+    
    for (i = 0; i < burnin_time ; i++)
    {
        initial_population[0].reproduceSSburnin(0, phi, h);

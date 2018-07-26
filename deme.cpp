@@ -126,7 +126,7 @@ void Deme::reproduceSS(int wf)
     list<Individual>::iterator it;
     double r = 2;
     double mom_fit,dad_fit;
-    double mig_mom,mig_dad;
+    double mig_mom,mig_dad,off_m;
 
     
     bool front;
@@ -194,8 +194,20 @@ void Deme::reproduceSS(int wf)
                 }while( dad_fit < randreal(0,max_fit));
         
               
+                // calculate the offspring's new migration rate
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                if(off_m > 0.5) off_m = 0.5;
+                if(off_m < 0) off_m = 0;
+    
+    
+
                 //create new individual
-                ind.setGenotype(gamete_mom,gamete_dad,mig_mom,mig_dad);
+                ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setIndMigRate(off_m);
+
+                
+                
+                
                
 ///                ind.setWFID(wf_cum);
 
@@ -301,7 +313,7 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
     double r = 2;
     double K = capacity;
     double mom_fit,dad_fit;
-    double mig_mom,mig_dad;
+    double mig_mom,mig_dad,off_m;
     bool front;
     
     front = (ID >= (wf-1));
@@ -372,8 +384,17 @@ void Deme::reproduceHS1(double mean_fit,int wf)		// hard selection
                 gamete_dad = it->getNewGamete(mutation_rate,s,front);//getNewGameteMM2(mutation_rate,mutation_rate,s); 
                 mig_dad = it->getIndMigRate();
                 
+                // calculate the offspring's new migration rate
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                if(off_m > 0.5) off_m = 0.5;
+                if(off_m < 0) off_m = 0;
+    
+    
+
                 //create new individual
-                ind.setGenotype(gamete_mom,gamete_dad,mig_mom,mig_dad);
+                ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setIndMigRate(off_m);
+
                 
                 
                 if (dad_fit > randreal(0,max_fit) && mom_fit > randreal(0,max_fit)) 
@@ -401,6 +422,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
     double mom_fit,dad_fit;
     extern double fitnessConstant;
     fitnessConstant = 1;
+    double mig_mom,mig_dad,off_m;
 
     
     bool front;
@@ -453,6 +475,7 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
                     advance(it,mom);
                     mom_fit = it->getRelativeFitness(s, h);
                     gamete_mom = it->getNewGameteBurnin(mutation_rate,s, phi);
+                    mig_dad = it->getIndMigRate();
                     
                 }while( mom_fit < randreal(0,max_fit));
 
@@ -463,12 +486,21 @@ void Deme::reproduceSSburnin(int wf, double phi, double h)
                     advance(it,dad);
                     dad_fit = it->getRelativeFitness(s, h);
                     gamete_dad = it->getNewGameteBurnin(mutation_rate,s, phi);
+                    mig_dad = it->getIndMigRate();
 
                     
                 }while( dad_fit < randreal(0,max_fit));
         
+                // calculate the offspring's new migration rate
+                off_m = (mig_mom + mig_dad) / 2 + rand_normal(0, 0.01);    // ADD the actual mutation rate for migration trait here plus the normally distributed effect size
+                if(off_m > 0.5) off_m = 0.5;
+                if(off_m < 0) off_m = 0;
+    
+    
+
                 //create new individual
                 ind.setGenotype(gamete_mom,gamete_dad);
+                ind.setIndMigRate(off_m);
                
 ///                ind.setWFID(wf_cum);
 
@@ -813,6 +845,25 @@ void Deme::setParams(int K,double mu,double sel,double mig, double dom)
         s=sel;
         mutation_rate=mu; 
         h=dom;
+        
+       // this->setDemeMigRate(mig);
+        
+}
+
+void Deme::setDemeMigRate(double m){
+    
+    list<Individual>::iterator it;
+    double dummy;
+    
+    it = this_generation.begin();
+    it->setIndMigRate(m);
+    dummy =it->getIndMigRate();
+    
+    for (it = this_generation.begin();it!=this_generation.end();it++)
+    {
+        it->setIndMigRate(m);
+        dummy =it->getIndMigRate();
+    }
 }
 
 

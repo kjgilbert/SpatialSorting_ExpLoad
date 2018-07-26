@@ -202,7 +202,7 @@ int main(int argc, char* argv[]) {
     starting_demes = 5;
     niche_width = 5;
     capacity = 25;
-    anc_pop_size = 2500;
+    anc_pop_size = 25;
     
     burnin_time = 10;
     expansion_start = 25;
