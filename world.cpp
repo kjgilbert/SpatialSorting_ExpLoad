@@ -717,6 +717,21 @@ vector<double> World::getEdgeDemes(int edgeColumn)         // returns vector wit
 }
 //*/
 
+// KJG adding:
+vector<double> World::getMeanMigTrait()                                        
+{
+    vector<Deme>::iterator it;
+    vector<double> data;
+    
+    for(it = demes.begin();it!=demes.end();it++)  
+    {
+        data.push_back(it->getMeanMigTrait()); 
+    }
+    
+    return(data);
+}
+
+
 vector<double> World::getHeterozygosity(int loci_begin,int loci_end)                                               // returns vector with variance in fitness of all demes
 {
     vector<Deme>::iterator it;

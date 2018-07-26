@@ -87,6 +87,7 @@ class World
         void printStat();
         void changeEnvironment(int demeID,double s0, double s1);
         vector<double> getMeanFit();
+        vector<double> getMeanMigTrait(); // added KJG
         vector<double> getDemeDensity(); // added KJG
         vector<double> getEdgeDemes(int edgeColumn); // added KJG
         vector<double> getHeterozygosity(int loci_begin,int loci_end);
@@ -143,6 +144,7 @@ class Deme
         void setDemeMigRate(double m);
         void printStat();
         double getMeanFit();
+        double getMeanMigTrait(); // added KJG
         double getDemeDensity(); // added KJG
         double getEdgeDemes(int edgeColumn); // added KJG
         double getHeterozygosity(vector<int> a_loci, int loci_begin,int loci_end);

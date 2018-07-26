@@ -774,6 +774,27 @@ double Deme::getMeanFit()
     return(mean_fit);
 }
 
+double Deme::getMeanMigTrait()
+{
+    double mean_mig=0;
+    
+    list<Individual>::iterator it;
+    
+    for (it = this_generation.begin();it!=this_generation.end();it++)
+    {
+        mean_mig += it->getIndMigRate();
+    }
+    
+    mean_mig /= this_generation.size();
+    
+    if (mean_mig!= mean_mig) 
+    {
+        mean_mig = -1;
+    }
+    
+    return(mean_mig);
+}
+
 double Deme::getVarFit(double mean_fit)
 {
     double var_fit=0;
