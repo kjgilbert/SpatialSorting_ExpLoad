@@ -236,6 +236,7 @@ int main(int argc, char* argv[]) {
     char filename3[150];  
     char filename4[150];  
     char filename5[150];  
+    char filename6[150];  
     
     // root dir for output files and  the starting name - fix this to come from param file
     // this doesn't work because it needs to know the size ahead of time :(   std::string full_path = path + "out_test_";
@@ -246,7 +247,7 @@ int main(int argc, char* argv[]) {
 
  
                                                            
-    ofstream outputfile,outputfile2,outputfile3,outputfile4,outputfile5,logfile;                        // streams to outputfiles
+    ofstream outputfile,outputfile2,outputfile3,outputfile4,outputfile5,outputfile6,logfile;                        // streams to outputfiles
     logfile.open(filename_log);
     logfile << "Random number generator initialized with seed " << curSeed << "\n";    
     logfile << "Simulating an expansion on a " << m1 << "x"<<m2<<" grid. \n";
@@ -318,12 +319,14 @@ int main(int argc, char* argv[]) {
         sprintf(filename2,"%s%s%d%s%d%s%d",base,"hom-mut_wid",niche_width,"_speed",theta,"_rep_",rep);
         sprintf(filename3,"%s%s%d%s%d%s%d",base,"het_wid",niche_width,"_speed",theta,"_rep_",rep); // this is just making a filename that is appended to and used later as filename 4, so don't need to open it at the moment
         sprintf(filename5,"%s%s%d%s%d%s%d",base,"popdens_wid",niche_width,"_speed",theta,"_rep_",rep);
+        sprintf(filename6,"%s%s%d%s%d%s%d",base,"mig-trait_wid",niche_width,"_speed",theta,"_rep_",rep);
 
  
         outputfile.open(filename);
         cout << " filename:" <<filename;
         outputfile2.open(filename2);
         outputfile4.open(filename5);
+        outputfile6.open(filename6);
         
     
 
@@ -392,6 +395,7 @@ int main(int argc, char* argv[]) {
         {        
             if(i % snapshot == 0)           // write out all the data every snapshot
             {
+                //________________________________________________________________________________
                 outdata = Grid2D.getMeanFit(); // get mean fitness of the whole population
 
                 for (j = 0; j < tot_demes; j++) // write it to file
@@ -399,8 +403,20 @@ int main(int argc, char* argv[]) {
                     outputfile << outdata[j] << " ";
                 }
                 outputfile << "\n";
+                
+                //________________________________________________________________________________
+                // get migration trait average per deme
+                outdata = Grid2D.getMeanMigTrait(); // get mean fitness of the whole population
 
-                outdata = Grid2D.getGenotypeFrequencies(0, loci, 1); // get  heterozygotes
+                for (j = 0; j < tot_demes; j++) // write it to file
+                {
+                    outputfile6 << outdata[j] << " ";
+                }
+                outputfile6 << "\n";
+
+                //________________________________________________________________________________
+                // get  heterozygotes
+                outdata = Grid2D.getGenotypeFrequencies(0, loci, 1); 
 
                 sprintf(filename4, "%s%s%d", filename3, "_gen_", (i));
                 
@@ -473,6 +489,12 @@ int main(int argc, char* argv[]) {
                 //finaloutputfile << outdata[j] << " ";
         }
         
+        outdata = Grid2D.getMeanMigTrait();                                          // write all data at the end of sim to object
+        for (j = 0;j<tot_demes;j++)                                             // put all the final data from that object into the output file
+        { 
+                outputfile6 << outdata[j] << " ";
+        }
+        
         
         outdata = Grid2D.getDemeDensity(); // get deme density across the whole population at the end of the sim
 
@@ -493,15 +515,24 @@ int main(int argc, char* argv[]) {
         {
  
                 outdata = Grid2D.getMeanFit();                                  // get mean fitness of the whole population
-     
                 for (j = 0;j<tot_demes;j++)                                     // write it to file
                 { 
                     outputfile << outdata[j] << " ";
                 }
                 outputfile << "\n";
 
-                outdata = Grid2D.getGenotypeFrequencies(0, loci, 1); // get  heterozygotes
+                //________________________________________________________________________________
+                // get migration trait average per deme
+                outdata = Grid2D.getMeanMigTrait(); // get mean fitness of the whole population
+                for (j = 0; j < tot_demes; j++) // write it to file
+                {
+                    outputfile6 << outdata[j] << " ";
+                }
+                outputfile6 << "\n";
+                //________________________________________________________________________________
 
+                
+                outdata = Grid2D.getGenotypeFrequencies(0, loci, 1); // get  heterozygotes
                 sprintf(filename4, "%s%s%d", filename3, "_gen_", (i*snapshot));
                 outputfile3.open(filename4);
 
@@ -517,7 +548,6 @@ int main(int argc, char* argv[]) {
 
 //                outdata = Grid2D.getGenotypeFrequencies(0, loci, 0); // get  wt homozygotes
                 outdata = Grid2D.getGenotypeFrequencies(0, loci, 2); // get  mutant homozygotes
-
                 sprintf(filename4, "%s%s%d", filename2, "_gen_", (i*snapshot));
                 outputfile3.open(filename4);
                 for (j = 0; j < (tot_demes); j++)
@@ -532,7 +562,6 @@ int main(int argc, char* argv[]) {
 
                 /// GET POP DENSITY ACROSS DEMES
                 outdata = Grid2D.getDemeDensity(); // get mean fitness of the whole population  // NEED TO CREATE THIS FILE, PUT IT SOMEWHERE IN WORLD.CPP
-
                 for (j = 0; j < tot_demes; j++) // write it to file
                 {
                     outputfile4 << outdata[j] << " ";
@@ -583,6 +612,7 @@ int main(int argc, char* argv[]) {
         outputfile.close();
         outputfile2.close();
         outputfile4.close();
+        outputfile6.close();
      
 
         Grid2D.clear(m1,m2,initial_colonized,anc_pop_size,burnin_time,capacity,expansionMode,mu,s,m,phi,h); 		// clear for next rep             
