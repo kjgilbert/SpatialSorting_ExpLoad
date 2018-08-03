@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
 
     
     // comment all this out for debug with hardcoded params
-///* 
+/* 
     double par;
     vector<double> params;          // character array to hold all the inputs from paramfile
     
@@ -194,9 +194,9 @@ int main(int argc, char* argv[]) {
     {
         cout << "\n MISSING REQUIRED NUMBER OF PARAMETERS, EXITING SIMULATION.\n";
     }
-//*/ 
+*/ 
 
-/*   uncomment this to debug and have hardcoded parameters
+///*   uncomment this to debug and have hardcoded parameters
     m1 = 5;
     m2 = 40;
     starting_demes = 5;
@@ -222,7 +222,7 @@ int main(int argc, char* argv[]) {
 
     tot_demes = m1*m2;
     initial_colonized = starting_demes*m1;  
-*/
+//*/
     
    loci = 2000;     // right now number of loci has to be hard coded in 
     
