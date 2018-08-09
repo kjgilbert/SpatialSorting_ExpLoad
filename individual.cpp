@@ -16,6 +16,7 @@ int Individual::loci = 2000;
 double Individual::rrate = 0.5; 
 vector<int> Individual::used_loci;
 vector<float> Individual::s_coeff;
+vector<float> Individual::m_coeff;
 
 
 inline int max(int a, int b) { return (a < b) ? b : a; }
@@ -478,6 +479,7 @@ unsigned long Individual::getNumberMutations()
 void Individual::set_selection_dist(double s,double mut_prop)   // here we set the distribution of effect sizes for loci (bens and dels)
 {       
     Individual::s_coeff.resize(loci);
+    Individual::m_coeff.resize(loci);   // also set the vector of migration mutational effects to same size as number of loci
     int i, j;
     
     for (i = 0;i<int(loci*mut_prop);i++)       // these are the deleterious mutations
@@ -492,8 +494,23 @@ void Individual::set_selection_dist(double s,double mut_prop)   // here we set t
         s_coeff[i] = -s;                                                            // for constant fitness effects
         //s_coeff[i] = -(s * (-log( 1 - ((float)j/(loci - (loci*mut_prop))) )));    // make beneficials reverse exponentially distributed from the negative s
         j=j+1;
+    }
+    
+    
+    
+    
+    // set the mutational effects for migration
+    for (i = 0;i<int(loci*mut_prop);i++)       // these are the deleterious mutations
+    {
+        m_coeff[i] = -s;        // make it negatively correlated to fitness effect - right now all effects are fixed
+    }
+    
+    j=0; // because we'll iterate i through the remaining loci that are bens, but j from 0 to number ben loci to get the correct quantile
+    for (i = int(loci*mut_prop); i<loci; i++) // these are the beneficials
+    {
+        m_coeff[i] = s;         // make it negatively correlated to fitness effect - right now all effects are fixed
+        j=j+1;
     } 
- 
 }
 
 //    THIS IS THE OLD CODE FOR MAKING THE DISTRIBUTION OF MUTATION EFFECTS EXPONENTIAL

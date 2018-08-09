@@ -186,6 +186,7 @@ class Individual
          static double rrate;                                                   // recombination rate between two consecutive loci, (no rec =) 0 <= rrate <= 0.5 (= free rec) 
          static vector<int> used_loci;
          static vector<float> s_coeff;
+         static vector<float> m_coeff;
          double wf_ID;
          int ancestors;
          double ind_mig_rate;
