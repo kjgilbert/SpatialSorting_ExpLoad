@@ -56,8 +56,11 @@ World::World(int length1,int length2,int initial_colonized,int initial_popsize,i
   
       
    initial_population[0].colonize();
+   
    initial_population[0].setDemeMigRate(migration_rate);
+   
    initial_population[0].set_selection_dist(phi);
+   
    demes[1].set_selection_dist(phi);
    
     

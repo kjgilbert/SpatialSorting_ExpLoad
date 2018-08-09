@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     
     
-///*   // comment this out for debug
+/*   // comment this out for debug
     std::string aux(argv[1]);       
 
     // get '/' or '\\' depending on unix/mac or windows.
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     std::string path = aux.substr(0,pos+1);
     std::string name = aux.substr(pos+1);
     // show results
-//*/    
+*/    
     
     
     
