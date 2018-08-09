@@ -36,6 +36,7 @@ struct heritableUnit
     
  
         Loci haplotype;
+        Loci mig_haplotype;
         //Distance d;
         //MutationHaploList muts;
                 
@@ -173,6 +174,7 @@ class Individual
 {
  private:
          vector<Loci> haplotypes;
+         vector<Loci> mig_haplotypes;
          //vector<MutationHaploList> mutations;
          
          //FitnessComponents haplotypes[2];
@@ -211,7 +213,9 @@ class Individual
         void setWFID(double id);
         int getAncestors();
         vector<double> getSumAlleles(int loci_begin,int loci_end);
+        vector<double> getSumMigrationAlleles(int loci_begin,int loci_end);
         vector<double> getSumGenotypes(int loci_begin,int loci_end,int genotypes);
+        vector<double> getSumMigrationGenotypes(int loci_begin,int loci_end,int genotypes);
         double getSquareSumAlleles();
         double getWFID();
         void normalizeFitness(double co);

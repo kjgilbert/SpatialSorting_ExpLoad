@@ -47,6 +47,9 @@ Individual::Individual()
     haplotypes[0].resize(loci);
     haplotypes[1].resize(loci);
     
+    mig_haplotypes[0].resize(loci);
+    mig_haplotypes[1].resize(loci);
+
     //mutations[0].resize(loci);
     //mutations[1].resize(loci);
     
@@ -63,6 +66,8 @@ Individual::Individual()
     fill_n(haplotypes[0].begin(),loci,0);
     fill_n(haplotypes[1].begin(),loci,0);
 
+    fill_n(mig_haplotypes[0].begin(),loci,0);
+    fill_n(mig_haplotypes[1].begin(),loci,0);
     
    /* fill_n(mutations_d[0].begin(),loci,0);
     fill_n(md_front[0].begin(),loci,0);
@@ -78,6 +83,7 @@ Individual::Individual()
 Individual::Individual(double m)
 {
     haplotypes.resize(2);
+    mig_haplotypes.resize(2);
     //mutations.resize(2);
     
     used_loci.resize(loci);
@@ -101,6 +107,9 @@ Individual::Individual(double m)
     
     haplotypes[0].resize(loci);
     haplotypes[1].resize(loci);
+
+    mig_haplotypes[0].resize(loci);
+    mig_haplotypes[1].resize(loci);
     
     //mutations[0].resize(loci);
     //mutations[1].resize(loci);
@@ -117,6 +126,9 @@ Individual::Individual(double m)
     
     fill_n(haplotypes[0].begin(),loci,0);
     fill_n(haplotypes[1].begin(),loci,0);
+
+    fill_n(mig_haplotypes[0].begin(),loci,0);
+    fill_n(mig_haplotypes[1].begin(),loci,0);
 
     
    /* fill_n(mutations_d[0].begin(),loci,0);
@@ -140,6 +152,7 @@ Individual::~Individual()
 heritableUnit Individual::getNewGamete(double mu,double s,bool front)           // this function adds mutations to the genome. mutations and backmutations occur at the same rate. (this will have an effect on the DFE, need to investigate this)
 {
     Loci hap_new;
+    Loci mig_hap_new;
     double rec_rate = rrate; 
         
     heritableUnit gam_new;
@@ -156,6 +169,7 @@ heritableUnit Individual::getNewGamete(double mu,double s,bool front)           
 
    site = randint(0,1);
    hap_new = haplotypes[site];
+   mig_hap_new = mig_haplotypes[site];
    
    if(rec_rate > 0)
    {
@@ -166,6 +180,7 @@ heritableUnit Individual::getNewGamete(double mu,double s,bool front)           
                site = (site+1)%2;
            }
            hap_new[i]=haplotypes[site][i]; 
+           mig_hap_new[i]=mig_haplotypes[site][i]; 
        } 
    }
   
@@ -199,6 +214,7 @@ heritableUnit Individual::getNewGamete(double mu,double s,bool front)           
 heritableUnit Individual::getNewGameteBurnin(double mu,double s,double phi)           // this function adds mutations to the genome. mutations and backmutations occur at the same rate. (this will have an effect on the DFE, need to investigate this)
 {
     Loci hap_new;
+    Loci mig_hap_new;
     double rec_rate = rrate; 
         
     heritableUnit gam_new;
@@ -215,6 +231,7 @@ heritableUnit Individual::getNewGameteBurnin(double mu,double s,double phi)     
 
    site = randint(0,1);
    hap_new = haplotypes[site];
+   mig_hap_new = mig_haplotypes[site];
    
    if(rec_rate > 0)
    {
@@ -225,6 +242,7 @@ heritableUnit Individual::getNewGameteBurnin(double mu,double s,double phi)     
                site = (site+1)%2;
            }
            hap_new[i]=haplotypes[site][i]; 
+           mig_hap_new[i]=mig_haplotypes[site][i]; 
        } 
    }
    
@@ -257,6 +275,7 @@ heritableUnit Individual::getNewGameteBurnin(double mu,double s,double phi)     
 heritableUnit Individual::getNewGameteMM2(double mu1,double mu2,double s)
 {
     Loci hap_new;
+    Loci mig_hap_new;
     vector<int>::iterator it;
     heritableUnit gam_new;
     
@@ -266,6 +285,7 @@ heritableUnit Individual::getNewGameteMM2(double mu1,double mu2,double s)
     site = randint(0,1);
     
     hap_new = haplotypes[0];
+    mig_hap_new = mig_haplotypes[0];
       
     for (i = 0; i < loci;i++)   // recombination
     {
@@ -275,6 +295,7 @@ heritableUnit Individual::getNewGameteMM2(double mu1,double mu2,double s)
         }
         
         hap_new[i]=haplotypes[site][i]; 
+        mig_hap_new[i]=mig_haplotypes[site][i]; 
         
 //         if (hap_new[i]==0)
 //        {
@@ -322,6 +343,9 @@ void Individual::setGenotype(heritableUnit g1,heritableUnit g2)
 {
     haplotypes[0] = g1.haplotype;
     haplotypes[1] = g2.haplotype;
+
+    mig_haplotypes[0] = g1.mig_haplotype;
+    mig_haplotypes[1] = g2.mig_haplotype;
 }
  
  
@@ -386,6 +410,11 @@ void Individual::print()
     for(int i=0;i<haplotypes[0].size();i++) { cout << haplotypes[0][i] << " ";}
     cout << "\n h2:";
     for(int i=0;i<haplotypes[1].size();i++) { cout << haplotypes[1][i] << " ";}
+
+    cout << "\n mig_h1:";
+    for(int i=0;i<mig_haplotypes[0].size();i++) { cout << mig_haplotypes[0][i] << " ";}
+    cout << "\n mig_h2:";
+    for(int i=0;i<mig_haplotypes[1].size();i++) { cout << mig_haplotypes[1][i] << " ";}
 }
 
 void Individual::setParams(int number_loci)
@@ -393,11 +422,16 @@ void Individual::setParams(int number_loci)
     loci = number_loci;         // HERE KJG
     
     haplotypes[0].resize(loci);
-    haplotypes[1].resize(loci);
-    
+    haplotypes[1].resize(loci);   
  
     fill_n(haplotypes[0].begin(),loci,0);      // initialize haplotype 
     fill_n(haplotypes[1].begin(),loci,0);  
+
+    mig_haplotypes[0].resize(loci);
+    mig_haplotypes[1].resize(loci);   
+ 
+    fill_n(mig_haplotypes[0].begin(),loci,0);      // initialize migration haplotype 
+    fill_n(mig_haplotypes[1].begin(),loci,0);  
 }
 
 
@@ -442,6 +476,20 @@ vector<double> Individual::getSumAlleles(int loci_begin,int loci_end)
     return(p);
 }
 
+vector<double> Individual::getSumMigrationAlleles(int loci_begin,int loci_end)
+{
+    vector<double> p;
+    
+    p.resize(loci_end);
+        
+    fill_n(p.begin(),loci_end,0);
+    
+    for (int i = loci_begin;i<loci_end;i++)
+    {
+        p[i] += mig_haplotypes[0][i]+mig_haplotypes[1][i];
+    }
+    return(p);
+}
 
 vector<double> Individual::getSumGenotypes(int loci_begin,int loci_end,int genotype)
 {
@@ -458,6 +506,22 @@ vector<double> Individual::getSumGenotypes(int loci_begin,int loci_end,int genot
             p[i] += 1;
     }
 
+    return(p);
+}
+
+vector<double> Individual::getSumMigrationGenotypes(int loci_begin,int loci_end,int genotype)
+{
+    vector<double> p;
+       
+    p.resize(loci_end-loci_begin);
+        
+    fill_n(p.begin(),loci_end-loci_begin,0);
+  
+    for (int i = loci_begin;i<loci_end;i++)
+    {
+        if(mig_haplotypes[0][i]+mig_haplotypes[1][i]==genotype)
+            p[i] += 1;
+    }
     return(p);
 }
 
