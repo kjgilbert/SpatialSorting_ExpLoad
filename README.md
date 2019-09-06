@@ -1,6 +1,6 @@
 # Spatial Sorting ExpLoad
 
-This is the code associated with simulations conducted in [](). If you use this code, please cite this publication.
+This is the code associated with simulations conducted in [Peischl & Gilbert *In Press*](https://www.journals.uchicago.edu/doi/10.1086/705993), DOI: 10.1086/705993. If you use this code, please cite this publication.
 
 This program simulates dispersal evolution across a full species range during expansion (not only the front-most deme). 
 It uses a stepping-stone migration model, and allows the user to specify the initial migration 
