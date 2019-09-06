@@ -35,7 +35,7 @@ double fitnessConstant; // a global variable for scaling fitness
 int main(int argc, char* argv[]) {
  
   
- /*  // comment this out for debug, and the part in parenthesis of main above  
+ ///*  // comment this out for debug, and the part in parenthesis of main above  
     if ( argc != 2 )
     {                   // argc should be length 2 for correct execution
                         //spot 0 is the program name when running it in command line
@@ -47,11 +47,11 @@ int main(int argc, char* argv[]) {
     
     string fn = argv[1]; //filename for parameter inputs
     cout << fn; 
-*/
+//*/
 
     
     
-/*   // comment this out for debug
+///*   // comment this out for debug
     std::string aux(argv[1]);       
 
     // get '/' or '\\' depending on unix/mac or windows.
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     std::string path = aux.substr(0,pos+1);
     std::string name = aux.substr(pos+1);
     // show results
-*/    
+//*/    
     
     
     
@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
 
     
     // comment all this out for debug with hardcoded params
-/* 
+///* 
     double par;
     vector<double> params;          // character array to hold all the inputs from paramfile
     
@@ -194,9 +194,9 @@ int main(int argc, char* argv[]) {
     {
         cout << "\n MISSING REQUIRED NUMBER OF PARAMETERS, EXITING SIMULATION.\n";
     }
-*/ 
+//*/ 
 
-///*   uncomment this to debug and have hardcoded parameters
+/*   uncomment this to debug and have hardcoded parameters
     m1 = 5;
     m2 = 40;
     starting_demes = 5;
@@ -222,7 +222,7 @@ int main(int argc, char* argv[]) {
 
     tot_demes = m1*m2;
     initial_colonized = starting_demes*m1;  
-//*/
+*/
     
    loci = 2000;     // right now number of loci has to be hard coded in 
     
