@@ -11,7 +11,7 @@ Landscapes may be 1- or 2-dimensional and of desired proportions, where each dem
 Each individual possesses 2,000 bi-allelic, unconditionally deleterious or beneficial loci, 
 where the proportion deleterious is specified by phi. These loci are separate from those impacting 
 dispersal evolution and only impact an individual's fitness. Fitness is multiplicative across loci, generations are 
-non-overlapping, and growth is instantaneous in newly-colonized demes. 
+non-overlapping, and growth is either instantaneous in newly-colonized demes or logistic. The current online version uses logistic growth, and to allow instantaneous growth, comment out lines 155 & 454 in deme.cpp, and uncomment lines 153 & 452 for the soft selection model, or lines 344 & 557 and 324 & 555 respectively for the hard selection model.
 
 
 The program is executed with an input file specifying the desired parameters. 
