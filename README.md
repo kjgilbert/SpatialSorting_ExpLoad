@@ -39,5 +39,5 @@ can be modified in deme.cpp lines 130 and 428 for the soft selection model, and 
 * `m` = migration rate
 * `s` = mean effect size of deleterious mutations (effect sizes are fixed, but code can be modified to an exponential distribution with this set as mean)
 * `phi` = the proportion of loci which are unconditionally deleterious mutations, all others are then given the opposite s as set above, i.e. a mean of -0.1 
-makes all deleterious mutations have s = -0.1 and all beneficial mutations s = +0.1  When the 2000-loci version of the program is used, phi is a proportion of these 2000 loci, but the last 1000 loci are always neutral regardless of the value of phi, e.g. for 900 deleterious loci, 100 beneficial loci, and 1000 neutral loci, phi should be set to 0.45 and *s* to -0.1.
+makes all deleterious mutations have s = -0.1 and all beneficial mutations s = +0.1  The program is currently hard-coded to contain 2,000 loci, but this can be modified in line 227 of main.cpp
 * `h` = dominance parameter
